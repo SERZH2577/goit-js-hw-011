@@ -11,14 +11,29 @@
 
 <body>
 
+  <header class="header">
+    <section class="section-header">
+      <form class="form">
+        <label>
+          <input type="text" name="query" class="search-input" placeholder="Search images..." />
+        </label>
 
-  <section>
-    <h1>Lorem ipsum dolor sit amet.</h1>
-    <!-- Path to images as from index.html file -->
-    <img src="./img/javascript.svg" alt="" />
+        <button type="submit">
+          <svg class="search-icon">
+            <use href="./img/sprite.svg#icon-search"></use>
+          </svg>
+        </button>
+      </form>
+    </section>
+  </header>
+
+  <section class="section section-gallery">
+    <ul class="list gallery"></ul>
+
+    <button type="submit" class="more" hidden>More</button>
   </section>
 
-
+  <span class="loader"></span>
 
   <script type="module" src="./main.js"></script>
 </body>
