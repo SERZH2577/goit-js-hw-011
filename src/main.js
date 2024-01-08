@@ -42,9 +42,9 @@ function loadsFirstPageOfGallery(e) {
   moreButtonRef.textContent = 'More';
   moreButtonRef.hidden = true;
   loaderRef.hidden = false;
+  galleryRef.innerHTML = '';
 
   fetchImages(page, searchValue).then(r => {
-    galleryRef.innerHTML = '';
     if (r.hits.length === 0) {
       iziToast.error({
         position: 'topRight',
@@ -57,7 +57,6 @@ function loadsFirstPageOfGallery(e) {
       return;
     }
 
-    galleryRef.innerHTML = '';
     page += 1;
 
     galleryRef.insertAdjacentHTML(
