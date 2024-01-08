@@ -44,32 +44,36 @@ function loadsFirstPageOfGallery(e) {
   loaderRef.hidden = false;
   galleryRef.innerHTML = '';
 
-  fetchImages(page, searchValue).then(r => {
-    if (r.hits.length === 0) {
-      iziToast.error({
-        position: 'topRight',
-        messageColor: 'brown',
-        message:
-          'Sorry, there are no images matching your search query. Please try again!',
-        timeout: 3000,
-      });
+  fetchImages(page, searchValue)
+    .then(r => {
+      if (r.hits.length === 0) {
+        iziToast.error({
+          position: 'topRight',
+          messageColor: 'brown',
+          message:
+            'Sorry, there are no images matching your search query. Please try again!',
+          timeout: 3000,
+        });
+
+        return;
+      }
+
+      page += 1;
+
+      galleryRef.insertAdjacentHTML(
+        'beforeend',
+        createsStringOfPageElements(r.hits)
+      );
+
+      lightbox.refresh();
+
+      if (r.hits.length === 40) moreButtonRef.hidden = false;
+    })
+    .catch(err => console.log(err))
+    .finally(() => {
       loaderRef.hidden = true;
-      return;
-    }
+    });
 
-    page += 1;
-
-    galleryRef.insertAdjacentHTML(
-      'beforeend',
-      createsStringOfPageElements(r.hits)
-    );
-
-    lightbox.refresh();
-
-    if (r.hits.length === 40) moreButtonRef.hidden = false;
-    if (moreButtonRef.hidden === false || r.hits.length < 40)
-      loaderRef.hidden = true;
-  });
   formRef.reset();
 }
 
@@ -79,24 +83,27 @@ function loadsOtherGalleryPages(e) {
   moreButtonRef.hidden = true;
   loaderRef.hidden = false;
 
-  fetchImages(page, searchValue).then(r => {
-    page += 1;
+  fetchImages(page, searchValue)
+    .then(r => {
+      page += 1;
 
-    galleryRef.insertAdjacentHTML(
-      'beforeend',
-      createsStringOfPageElements(r.hits)
-    );
+      galleryRef.insertAdjacentHTML(
+        'beforeend',
+        createsStringOfPageElements(r.hits)
+      );
 
-    lightbox.refresh();
+      lightbox.refresh();
 
-    if (r.hits.length === 40) moreButtonRef.hidden = false;
-    if (moreButtonRef.hidden === false) loaderRef.hidden = true;
-    if (r.hits.length < 40) {
-      moreButtonRef.hidden = false;
-      moreButtonRef.disabled = true;
+      if (r.hits.length === 40) moreButtonRef.hidden = false;
+      if (r.hits.length < 40) {
+        moreButtonRef.hidden = false;
+        moreButtonRef.disabled = true;
+
+        moreButtonRef.textContent = 'Images are over';
+      }
+    })
+    .catch(err => console.log(err))
+    .finally(() => {
       loaderRef.hidden = true;
-
-      moreButtonRef.textContent = 'Images are over';
-    }
-  });
+    });
 }
